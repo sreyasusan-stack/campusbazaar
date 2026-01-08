@@ -28,6 +28,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #fce4ec; /* soft beige / light pastel */
+  font-family: sans-serif;
+  overflow-x: hidden;  
 }
 
 h1 {

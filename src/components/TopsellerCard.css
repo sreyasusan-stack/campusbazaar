@@ -1,0 +1,22 @@
+.top-seller-card {
+  width: 200px;
+  padding: 40px;
+  border-radius: 12px;
+  border: 2px solid #ddd;
+  text-align: center;
+  background-color: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.top-seller-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.top-seller-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #fcd4e6;
+  margin: 0 auto 10px;
+}

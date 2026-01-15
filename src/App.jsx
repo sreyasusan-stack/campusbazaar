@@ -11,6 +11,8 @@ import Home from './pages/Home.jsx';
 
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
+import BecomeSeller from './pages/buyer/BecomeSeller';
+
 
 import BuyerDashboard from './pages/buyer/BuyerDashboard';
 import ProductList from './pages/buyer/ProductList';
@@ -28,6 +30,8 @@ function App() {
       {/* Auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/buyer/become-seller" element={<BecomeSeller />} />
+
 
       {/* Buyer */}
       <Route path="/buyer" element={<BuyerDashboard />} />

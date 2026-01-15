@@ -1,19 +1,21 @@
+import './Auth.css';
+import { Link } from 'react-router-dom';
+
 function Login() {
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Login to CampusBazaar</h2>
 
-      <input type="text" placeholder="UID" />
-      <br /><br />
+        <input type="text" placeholder="Enter your UID" />
+        <input type="password" placeholder="Enter your password" />
 
-      <input type="password" placeholder="Password" />
-      <br /><br />
+        <button>Login</button>
 
-      <button>Login</button>
-
-      <p>
-        New user? <a href="/signup">Signup</a>
-      </p>
+        <p className="auth-link">
+          New user? <Link to="/signup">Create an account</Link>
+        </p>
+      </div>
     </div>
   );
 }

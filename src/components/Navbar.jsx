@@ -8,12 +8,22 @@ function Navbar() {
         <h2>CampusBazaar</h2>
       </div>
 
-      <input type="text" placeholder="Search here..." />
+      <div className="search-container">
+        <span className="search-icon">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Search products, shops, or categories..."
+        />
+      </div>
+{/*<input type="text" placeholder="Search here..." />*/}
 
-      <div>
+      <div className='nav-actions'>
         <Link to="/login">Login</Link>{' '}
         <Link to="/signup">Sign Up</Link>{' '}
-        <button>Sign as Seller</button>
+        <Link to="/buyer/become-seller">
+    <button>Become a Seller</button>
+  </Link>
+       {/* <button>Become a Seller</button> */}
       </div>
     </nav>
   );

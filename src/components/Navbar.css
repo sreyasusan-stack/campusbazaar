@@ -39,3 +39,26 @@ nav div {                    /* login/signup buttons container */
   gap: 12px;
   flex-wrap: wrap;           /* wrap buttons on small screens instead of overflowing */
 }
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 25px;
+  padding: 6px 12px;
+  width: 350px;
+  border: 1px solid #ddd;
+}
+
+.search-container input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.search-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}

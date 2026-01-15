@@ -5,7 +5,7 @@ import './Home.css';
 
 function Home() {
   return (
-    <>
+     <div className="home">
       <Navbar />
 
       <section className="home-section hero">
@@ -46,7 +46,8 @@ function Home() {
     name="Mugs"/>
   </div>
 </section>
-    </>
+</div>
+    
   );
 }
 

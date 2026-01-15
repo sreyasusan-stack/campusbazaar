@@ -1,3 +1,9 @@
+.home {
+  min-height: 100vh;
+  background-color: #fce4ec; /* your beige/pastel theme */
+}
+
+
 .home-section {
   padding: 50px;
 }

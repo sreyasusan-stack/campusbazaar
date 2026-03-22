@@ -1,7 +1,11 @@
+import { Link } from "react-router-dom";
 import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
 import TopsellerCard from '../components/TopsellerCard';
 import './Home.css';
+import products from "../data/products";
+
+
 
 function Home() {
   return (
@@ -19,20 +23,25 @@ function Home() {
   <h2 className="side-title">TOP <br/> SELLERS</h2>
 
 <div className="card-row-wrapper">
-  <div className="card-row">
-    <TopsellerCard name="Madah Crochet Store" />
-    <TopsellerCard name="Little Crafts" />
-    <TopsellerCard name="Candle By" />
-    <TopsellerCard name="ThriftCorner" />
-  </div>
+<div className="card-row">
+  {products.map(product => (
+    <ProductCard key={product.id} product={product} />
+  ))}
+</div>
+
   </div>
 </section>
 
 
 
-      
-<section>
-  <h2>Popular Products</h2>
+<section className="popular-products">
+
+  <h2 className="popular-title">Popular Products</h2>
+
+  
+   <Link to="/buyer/products">
+    <button className="view-all-btn">View All Products</button>
+  </Link>
 
   <div className="card-row">
     

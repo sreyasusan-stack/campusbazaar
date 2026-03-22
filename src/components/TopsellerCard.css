@@ -1,4 +1,4 @@
-.top-seller-card {
+/*.top-seller-card {
   width: 200px;
   padding: 40px;
   border-radius: 12px;
@@ -19,4 +19,50 @@
   border-radius: 50%;
   background-color: #fcd4e6;
   margin: 0 auto 10px;
+}
+*/
+
+.top-seller-card {
+  width: 200px;
+  height: 260px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: #e0d8d0;
+  transition: transform 0.2s ease;
+}
+
+.top-seller-card:hover {
+  transform: translateY(-4px);
+}
+
+.top-seller-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Fallback when there's no image */
+.top-seller-avatar {
+  width: 100%;
+  height: 100%;
+  background: #d4c5b8;
+}
+
+.top-seller-card p {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c2c2a;
+  text-align: center;
 }

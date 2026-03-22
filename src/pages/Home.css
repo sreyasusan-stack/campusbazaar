@@ -15,6 +15,8 @@
   color: #4e1c1c;
 }
 
+
+
 .card-row {
   display: flex;
   gap: 80px;
@@ -46,4 +48,28 @@
     font-weight: 600;
     font-family:Georgia, 'Times New Roman', Times, serif;
     font-size: 28px;
+}
+
+.view-all-btn {
+  margin-bottom: 16px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  background-color: #6b4e4e;
+  color: white;
+  cursor: pointer;
+}
+
+/* Popular products section */
+.popular-products {
+  text-align: center;
+  padding: 50px;
+}
+
+.popular-title {
+  font-size: 36px; /* bigger text */
+  font-family: Georgia, 'Times New Roman', serif; /* elegant font */
+  color: #4e1c1c; /* matches your theme */
+  margin-bottom: 10px;
+  font-weight: 600;
 }

@@ -12,7 +12,7 @@ import Home from './pages/Home.jsx';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import BecomeSeller from './pages/buyer/BecomeSeller';
-
+import Checkout from "./pages/buyer/Checkout";
 
 import BuyerDashboard from './pages/buyer/BuyerDashboard';
 import ProductList from './pages/buyer/ProductList';
@@ -50,6 +50,7 @@ function App() {
       <Route path="/buyer/products/:id" element={<ProductDetails />} />
       <Route path="/buyer/chat/:sellerId" element={<Chat />} />
       <Route path="/buyer/cart" element={<Cart />} />
+      <Route path="/buyer/checkout" element={<Checkout />} />
 
       {/* Seller */}
       {/* <Route path="/seller" element={<SellerDashboard />} /> */}

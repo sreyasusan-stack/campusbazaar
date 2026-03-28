@@ -1,62 +1,80 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
 import TopsellerCard from '../components/TopsellerCard';
+import { supabase } from "../supabaseClient";
 import './Home.css';
-import products from "../data/products";
-
-
 
 function Home() {
+  const [topProducts, setTopProducts] = useState([]);
+  const [popularProducts, setPopularProducts] = useState([]);
+
+  useEffect(() => {
+    fetchTopProducts();
+    fetchPopularProducts();
+  }, []);
+
+  async function fetchTopProducts() {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .limit(4);
+    if (error) console.error(error);
+    else setTopProducts(data);
+  }
+
+  async function fetchPopularProducts() {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .range(4, 7);  // gets products 5-8 so different from top section
+    if (error) console.error(error);
+    else setPopularProducts(data);
+  }
+
   return (
-     <div className="home">
+    <div className="home">
       <Navbar />
 
+      {/* HERO */}
       <section className="home-section hero">
-  <h1 style={{ fontSize: '42px', lineHeight: '1.3' }}>
-    Your Campus, Your <br />
-    Marketplace, Your Creation.
-  </h1>
-</section>
+        <h1 style={{ fontSize: '42px', lineHeight: '1.3' }}>
+          Your Campus, Your <br />
+          Marketplace, Your Creation.
+        </h1>
+      </section>
 
-<section className="home-section top-sellers-section">
-  <h2 className="side-title">TOP <br/> SELLERS</h2>
+      {/* TOP SELLERS */}
+      <section className="home-section top-sellers-section">
+        <h2 className="side-title">TOP <br /> SELLERS</h2>
+        <div className="card-row-wrapper">
+          <div className="card-row">
+            {topProducts.map(product => (
+              <TopsellerCard
+                key={product.id}
+                name={product.name}
+                image={product.image_urls}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
 
-<div className="card-row-wrapper">
-<div className="card-row">
-  {products.map(product => (
-    <ProductCard key={product.id} product={product} />
-  ))}
-</div>
+      {/* POPULAR PRODUCTS */}
+      <section className="popular-products">
+        <h2 className="popular-title">Popular Products</h2>
+        <Link to="/buyer/products">
+          <button className="view-all-btn">View All Products</button>
+        </Link>
+        <div className="card-row" style={{ marginTop: "24px" }}>
+          {popularProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
 
-  </div>
-</section>
-
-
-
-<section className="popular-products">
-
-  <h2 className="popular-title">Popular Products</h2>
-
-  
-   <Link to="/buyer/products">
-    <button className="view-all-btn">View All Products</button>
-  </Link>
-
-  <div className="card-row">
-    
-    <ProductCard image="https://media.istockphoto.com/id/2177207434/photo/autumn-candlelight-still-life-indoors.jpg?s=612x612&w=is&k=20&c=rhbh1IEzekOU5RSJdNrxYiVyLYafK1lxuAsGG1F8Log="
-    name="Candles" />
-    <ProductCard image="https://media.istockphoto.com/id/2238812607/photo/crochet-bunny-ballerina-in-pink-dress.jpg?s=612x612&w=is&k=20&c=DstLfaVYtdkbkBRKT3yKRPJAAoTbXBYe5j37xmBbSeY=" 
-    name="Crochet Bunny" />
-    <ProductCard image="https://images.pexels.com/photos/8105118/pexels-photo-8105118.jpeg" 
-     name="Jewellery"/>
-    <ProductCard image="https://www.decordoers.in/cdn/shop/files/Untitleddesign-2025-04-18T172850.723.jpg?v=1744978146&width=493" 
-    name="Mugs"/>
-  </div>
-</section>
-</div>
-    
+    </div>
   );
 }
 

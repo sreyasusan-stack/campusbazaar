@@ -88,9 +88,9 @@ function Cart() {
               <button className="continue-btn" onClick={() => navigate("/buyer/products")}>
                 Continue Shopping
               </button>
-              <button className="checkout-btn">
-                Proceed to Checkout
-              </button>
+             <button className="checkout-btn" onClick={() => navigate("/buyer/checkout")}>
+  Proceed to Checkout
+</button>
             </div>
           </div>
         </>

@@ -1,21 +1,6 @@
-/*import './TopsellerCard.css';
-
-function TopsellerCard({ name }) {
-  return (
-    <div className="top-seller-card">
-      <div className="top-seller-avatar"></div>
-      <p>{name}</p>
-    </div>
-  );
-}
-
-export default TopsellerCard;
-
-*/
-
 import './TopsellerCard.css';
 
-function TopsellerCard({ name, image }) {
+function TopsellerCard({ name, image, category }) {
   return (
     <div className="top-seller-card">
       {image
@@ -23,9 +8,9 @@ function TopsellerCard({ name, image }) {
         : <div className="top-seller-avatar" />
       }
       <p>{name}</p>
+      {category && <span className="top-seller-category">{category}</span>}
     </div>
   );
 }
 
 export default TopsellerCard;
-

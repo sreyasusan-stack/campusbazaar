@@ -30,39 +30,195 @@
 
 // export default AdminDashboard;
 
-
-
-
-import { Link } from 'react-router-dom';
-
-import './AdminDashboard.css'; // Import the CSS file
+import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { supabase } from "../../supabaseClient";
+import './AdminDashboard.css';
 
 function AdminDashboard() {
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    buyers: 0,
+    sellers: 0,
+    pending: 0,
+  });
+
+  const fetchDashboardStats = async () => {
+    const { data: users, error: userError } = await supabase
+      .from("users")
+      .select("role, seller_status");
+
+    const { data: requests, error: requestError } = await supabase
+      .from("seller_requests")
+      .select("status");
+
+    if (userError || requestError) {
+      console.error(userError || requestError);
+      return;
+    }
+
+    setStats({
+      totalUsers: users.length,
+      buyers: users.filter(u => u.role === "buyer").length,
+      sellers: users.filter(u => u.role === "seller" && u.seller_status === "approved").length,
+      pending: requests.filter(r => r.status === "pending").length,
+    });
+  };
+
+  const fetchProfile = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("college_id, email, role, seller_status")
+      .eq("id", user.id)
+      .single();
+
+    if (error || !data) return;
+
+    const { data: profile, error: profileError } = await supabase
+      .from("college_users")
+      .select("name, class_or_designation, department")
+      .eq("college_id", data.college_id)
+      .single();
+
+    if (profileError) console.error(profileError);
+
+    setProfile({
+      ...data,
+      ...profile,
+      email: user.email
+    });
+  };
+
+  useEffect(() => {
+    fetchDashboardStats();
+    fetchProfile();
+  }, []);
+
   return (
     <div className="admin-container">
-      
+
       {/* Sidebar */}
       <div className="sidebar">
-        <h3>Admin Panel</h3>
-        <p>
-            <Link to="/admin">Dashboard</Link>
-        </p>
-
-        <p>
-        <Link to="/admin/approvals">Seller Approvals</Link>
-        </p>
+        <div className="sidebar-brand">
+          <h3>CampusBazaar</h3>
+          <p>Admin Panel</p>
+        </div>
+        <nav className="sidebar-nav">
+          <NavLink 
+            to="/admin" 
+            end // Ensures this is ONLY active on the main dashboard
+            className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+          >
+            <span className="nav-dot" /> Dashboard
+          </NavLink>
+          
+          <NavLink 
+            to="/admin/approvals" 
+            className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+          >
+            <span className="nav-dot" /> Seller Approvals
+          </NavLink>
+        </nav>
       </div>
 
-      {/* Main Content */}
-      <div className="main-content">
-        <h1>Admin Dashboard</h1>
+      {/* Right Column */}
+      <div className="right-col">
 
-        <div className="stats-grid">
-          <div className="stats-card">Total Users</div>
-          <div className="stats-card">Total Buyers</div>
-          <div className="stats-card">Total Sellers</div>
-          <div className="stats-card">Pending Seller Approvals</div>
-          <div className="stats-card">Total Orders</div>
+        {/* Topbar */}
+        <div className="dash-topbar">
+          <span className="dash-topbar-title">Admin Dashboard</span>
+          <div className="dash-topbar-right">
+            <span>Welcome back</span>
+            <div
+              className="dash-avatar"
+              onClick={() => setPanelOpen(true)}
+              title={profile?.email}
+            >
+              {profile?.name?.charAt(0).toUpperCase() ?? "A"}
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="main-content">
+          <h1>Overview</h1>
+
+          <div className="stats-grid">
+            <div className="stats-card">
+              <h3>Total Users</h3>
+              <p>{stats.totalUsers}</p>
+            </div>
+            <div className="stats-card">
+              <h3>Total Buyers</h3>
+              <p>{stats.buyers}</p>
+            </div>
+            <div className="stats-card">
+              <h3>Total Sellers</h3>
+              <p>{stats.sellers}</p>
+            </div>
+            <div className="stats-card">
+              <h3>Pending Approvals</h3>
+              <p>{stats.pending}</p>
+            </div>
+            <div className="stats-card">
+              <h3>Total Orders</h3>
+              <p>Coming Soon</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Overlay */}
+      {panelOpen && (
+        <div className="panel-overlay" onClick={() => setPanelOpen(false)} />
+      )}
+
+      {/* Slide Panel */}
+      <div className={`slide-panel ${panelOpen ? "open" : ""}`}>
+        <div className="panel-header">
+          <p>My Profile</p>
+          <button className="panel-close-btn" onClick={() => setPanelOpen(false)}>✕</button>
+        </div>
+
+        <div className="panel-body">
+          <div className="panel-avatar">
+            {profile?.name?.charAt(0).toUpperCase() ?? "A"}
+          </div>
+          <p className="panel-name">{profile?.name ?? "Admin"}</p>
+          <p className="panel-role">{profile?.email ?? ""}</p>
+          <div className="panel-badge-wrap">
+            <span className="panel-badge">Admin</span>
+          </div>
+
+          {[
+            ["Name",        profile?.name],
+            ["College ID",  profile?.college_id],
+            ["Designation", profile?.class_or_designation],
+            ["Email",       profile?.email],
+            ["Role",        "Admin"],
+          ].map(([key, val]) => (
+            <div className="info-row" key={key}>
+              <span className="info-key">{key}</span>
+              <span className="info-val">{val ?? "N/A"}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="panel-footer">
+          <button
+            className="signout-btn"
+            onClick={async () => {
+              await supabase.auth.signOut();
+              window.location.href = "/login";
+            }}
+          >
+            Sign out
+          </button>
         </div>
       </div>
 

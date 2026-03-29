@@ -48,12 +48,17 @@ function Checkout() {
 
     setPlacing(true);
 
-    // insert order into orders table
+    const { data: { user } } = await supabase.auth.getUser();
+
     const { data: order, error: orderError } = await supabase
       .from("orders")
       .insert({
-        total_price: total,
+        buyer_id: user ? user.id : null,
+        user_id: user ? user.id : null,
+        seller_id: null,
         status: "pending",
+        total_amount: total,
+        total_price: total,
         payment_method: payment,
         delivery_address: `${address.hostel}, Room ${address.room}, ${address.landmark}`,
         buyer_name: address.fullName,
@@ -63,7 +68,8 @@ function Checkout() {
       .single();
 
     if (orderError) {
-      console.error(orderError);
+      console.error("Order error:", orderError);
+      alert("Failed to place order: " + orderError.message);
       setPlacing(false);
       return;
     }
@@ -76,10 +82,19 @@ function Checkout() {
       price: item.products.price
     }));
 
-    await supabase.from("order_items").insert(orderItems);
+    const { error: itemsError } = await supabase
+      .from("order_items")
+      .insert(orderItems);
+
+    if (itemsError) console.error("Order items error:", itemsError);
 
     // clear cart
-    await supabase.from("cart").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+    const { error: cartError } = await supabase
+      .from("cart")
+      .delete()
+      .gt("id", "00000000-0000-0000-0000-000000000000");
+
+    if (cartError) console.error("Cart clear error:", cartError);
 
     setPlacing(false);
     setOrderPlaced(true);
@@ -112,10 +127,8 @@ function Checkout() {
         {/* LEFT — FORMS */}
         <div className="checkout-left">
 
-          {/* DELIVERY ADDRESS */}
           <div className="checkout-section">
             <h3>Delivery Address</h3>
-
             <input
               type="text"
               name="fullName"
@@ -153,10 +166,8 @@ function Checkout() {
             />
           </div>
 
-          {/* PAYMENT METHOD */}
           <div className="checkout-section">
             <h3>Payment Method</h3>
-
             <div className="payment-options">
               {[
                 { value: "upi", label: "UPI", icon: "📱" },

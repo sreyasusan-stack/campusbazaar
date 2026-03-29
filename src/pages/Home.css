@@ -17,15 +17,6 @@
 
 
 
-.card-row {
-  display: flex;
-  gap: 32px;   
-  max-width: 100%;
-
-    margin-top: 50px;
-   
-    padding-bottom: 16px;
-}
 .card-row-wrapper {
   overflow-x: auto;       /* scroll only here */
   /*padding-bottom: 10px;
@@ -47,13 +38,12 @@
 
 .side-title {
   min-width: 160px;
-  font-size: 24px;
-  margin:0;
-  padding-top: 125px;
-    font-weight: 600;
-    font-family:Georgia, 'Times New Roman', Times, serif;
-    font-size: 28px;
-     color: #4e1c1c;   /* warm golden — complements the brown #6b4e4e */
+  font-size: 28px;
+  margin: 0;
+  padding-top: 60px;  /* reduced from 125px */
+  font-weight: 600;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #4e1c1c;
 }
 
 .view-all-btn {
@@ -78,4 +68,10 @@
   color: #4e1c1c; /* matches your theme */
   margin-bottom: 10px;
   font-weight: 600;
+}
+.card-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: nowrap;
+  align-items: flex-start;
 }

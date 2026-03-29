@@ -11,24 +11,51 @@ function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [cartMsg, setCartMsg] = useState("");
+ 
 
-  useEffect(() => {
-    async function fetchProduct() {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("id", id)
-        .single();
+useEffect(() => {
+  async function fetchProduct() {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-      if (error) console.error(error);
-      else {
-        setProduct(data);
-        fetchRelated(data.category, data.id);
-      }
-      setLoading(false);
+    if (error) console.error(error);
+    else {
+      setProduct(data);
+      fetchRelated(data.category, data.id);
+      saveRecentlyViewed(data.id); // add this line
     }
-    fetchProduct();
-  }, [id]);
+    setLoading(false);
+  }
+  fetchProduct();
+}, [id]);
+
+// recently viewed logic
+async function saveRecentlyViewed(productId) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  await supabase
+    .from("recently_viewed")
+    .upsert({
+      user_id: user.id,
+      product_id: productId,
+      viewed_at: new Date().toISOString()
+    }, { onConflict: "user_id,product_id" });
+}
+async function fetchRecentlyViewed(userId) {
+  const { data, error } = await supabase
+    .from("recently_viewed")
+    .select("*, products(*)")
+    .eq("user_id", userId)
+    .order("viewed_at", { ascending: false })
+    .limit(4);
+
+  if (error) console.error(error);
+  else setRecentlyViewed(data || []);
+}
 
   async function fetchRelated(category, currentId) {
     const { data } = await supabase

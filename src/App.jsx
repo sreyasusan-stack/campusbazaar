@@ -17,6 +17,10 @@ import Checkout from "./pages/buyer/Checkout";
 import BuyerDashboard from './pages/buyer/BuyerDashboard';
 import ProductList from './pages/buyer/ProductList';
 import ProductDetails from './pages/buyer/ProductDetails';
+import ShopPage from './pages/buyer/ShopPage';
+import ShopList from './pages/buyer/ShopList';
+
+
 import Chat from './pages/buyer/Chat';
 import SellerApprovals from './pages/admin/SellerApprovals';
 
@@ -51,6 +55,8 @@ function App() {
       <Route path="/buyer/chat/:sellerId" element={<Chat />} />
       <Route path="/buyer/cart" element={<Cart />} />
       <Route path="/buyer/checkout" element={<Checkout />} />
+      <Route path="/shop/:id" element={<ShopPage />} />
+      <Route path="/shops" element={<ShopList />} />
 
       {/* Seller */}
       {/* <Route path="/seller" element={<SellerDashboard />} /> */}

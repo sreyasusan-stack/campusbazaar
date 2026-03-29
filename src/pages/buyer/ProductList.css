@@ -81,3 +81,13 @@
   border-radius: 20px;
   cursor: pointer;
 }
+.no-results {
+  text-align: center;
+  margin-top: 80px;
+  color: #888;
+}
+
+.no-results p {
+  font-size: 15px;
+  margin-bottom: 8px;
+}

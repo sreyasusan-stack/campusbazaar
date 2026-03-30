@@ -25,7 +25,7 @@ function Signup() {
     e.preventDefault();
     setError("");
 
-    // 🔴 VALIDATIONS
+    //  VALIDATIONS
     if (!formData.email.endsWith("@xaviers.edu.in")) {
       setError("Only @xaviers.edu.in emails allowed");
       return;
@@ -48,6 +48,18 @@ function Signup() {
 
     if (checkError || !collegeUser) {
       setError("Invalid College ID or Email");
+      setLoading(false);
+      return;
+    }
+     // 🔹 CHECK IF ALREADY REGISTERED  
+    const { data: existingUser } = await supabase
+      .from("users")
+      .select("id")
+      .or(`email.eq.${formData.email},college_id.eq.${formData.college_id}`)
+      .single();
+
+    if (existingUser) {
+      setError("This email or College ID is already registered. Please login instead.");
       setLoading(false);
       return;
     }

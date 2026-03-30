@@ -286,3 +286,37 @@
   font-weight: 600;
   align-self: center;
 }
+.pd-review-form {
+  background: #fdf6f6;
+  border: 1px solid #fce4ec;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.pd-review-form h4 {
+  color: #2d1b12;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.pd-star-select {
+  margin-bottom: 12px;
+}
+
+.pd-review-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #f0e6e6;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 12px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.pd-review-textarea:focus {
+  outline: none;
+  border-color: #f48fb1;
+}

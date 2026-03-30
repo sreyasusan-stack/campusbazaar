@@ -6,6 +6,9 @@ import "./ProductList.css";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
@@ -17,59 +20,91 @@ function ProductList() {
 
   async function fetchProducts() {
     setLoading(true);
+    let combined = [];
 
     if (!searchQuery) {
       const { data, error } = await supabase
         .from("products")
         .select("*");
       if (error) console.error(error);
-      else setProducts(data);
-      setLoading(false);
-      return;
+      else combined = data || [];
+    } else {
+      const { data: nameData } = await supabase
+        .from("products")
+        .select("*")
+        .ilike("name", `%${searchQuery}%`);
+
+      const { data: descData } = await supabase
+        .from("products")
+        .select("*")
+        .ilike("description", `%${searchQuery}%`);
+
+      combined = [...(nameData || [])];
+      (descData || []).forEach(item => {
+        if (!combined.find(p => p.id === item.id)) {
+          combined.push(item);
+        }
+      });
     }
 
-    const { data: nameData } = await supabase
-      .from("products")
-      .select("*")
-      .ilike("name", `%${searchQuery}%`);
-
-    const { data: descData } = await supabase
-      .from("products")
-      .select("*")
-      .ilike("description", `%${searchQuery}%`);
-
-    const combined = [...(nameData || [])];
-    (descData || []).forEach(item => {
-      if (!combined.find(p => p.id === item.id)) {
-        combined.push(item);
-      }
-    });
-
     setProducts(combined);
+    setFiltered(combined);
+
+    // build category list from products
+    const cats = ["All", ...new Set(combined.map(p => p.category).filter(Boolean))];
+    console.log("Categories found:", cats);
+console.log("Sample product categories:", combined.map(p => p.category));
+    setCategories(cats);
+    setActiveCategory("All");
     setLoading(false);
+  }
+
+  function filterByCategory(cat) {
+    setActiveCategory(cat);
+    if (cat === "All") setFiltered(products);
+    else setFiltered(products.filter(p => p.category === cat));
   }
 
   return (
     <div className="product-page">
       <div className="product-header">
         {searchQuery
-          ? <><h2>Results for "{searchQuery}"</h2>
-              <p>{products.length} product{products.length !== 1 ? "s" : ""} found</p></>
-          : <><h2>All Products</h2>
-              <p>Browse campus products from student sellers</p></>
+          ? <>
+              <h2>Results for "{searchQuery}"</h2>
+              <p>{filtered.length} product{filtered.length !== 1 ? "s" : ""} found</p>
+            </>
+          : <>
+              <h2>All Products</h2>
+              <p>Browse campus products from student sellers</p>
+            </>
         }
       </div>
 
+      {/* CATEGORY FILTER PILLS */}
+      {!loading && categories.length > 1 && (
+        <div className="category-pills">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              className={`pill ${activeCategory === cat ? "active" : ""}`}
+              onClick={() => filterByCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      )}
+
       {loading ? (
         <p style={{ padding: "40px" }}>Loading...</p>
-      ) : products.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="no-results">
-          <p>No products found for "<strong>{searchQuery}</strong>"</p>
-          <p>Try searching for candles, jewellery, food, art...</p>
+          <p>No products found{searchQuery ? ` for "<strong>${searchQuery}</strong>"` : ""}.</p>
+          <p>Try searching for categories...</p>
         </div>
       ) : (
         <div className="product-grid">
-          {products.map((p) => (
+          {filtered.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>

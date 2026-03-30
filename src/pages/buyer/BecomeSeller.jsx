@@ -36,11 +36,14 @@ function BecomeSeller() {
           <label>Product Category</label>
           <select>
             <option>Select product type</option>
-            <option>Food & Beverages</option>
-            <option>Handmade Crafts</option>
-            <option>Thrift Clothing</option>
-            <option>Stationery</option>
-            <option>Jewellery</option>
+            <option>bakery</option>
+            <option>home decor</option>
+            <option>accessories</option>
+            <option>stationery</option>
+            <option>gifting</option>
+            <option>Ceramic ware
+            </option>
+            
           </select>
         </div>
 
